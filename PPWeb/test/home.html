@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Phil's Pills Home</title> 
+<link rel="stylesheet" href="../css/homestyle.css" type="text/css" /> 
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>   
+<script>  
+	jQuery(document).ready(function() {
+    	jQuery('.tabs .tab-links a').on('click', function(e)  {
+        	var currentAttrValue = jQuery(this).attr('href');
+ 			
+        	// Show/Hide Tabs 
+			jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+        	//jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+ 
+        	// Change/remove current tab to active
+        	jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        	e.preventDefault();
+    	});
+	});
+</script> 
+<script type="text/javascript">
+	var tday=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+	var tmonth=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+
+	function GetClock(){
+	var d=new Date();
+	var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate();
+	var nhour=d.getHours(),nmin=d.getMinutes(),ap;
+	if(nhour==0){ap=" AM";nhour=12;}
+	else if(nhour<12){ap=" AM";}
+	else if(nhour==12){ap=" PM";}
+	else if(nhour>12){ap=" PM";nhour-=12;}
+
+	if(nmin<=9) nmin="0"+nmin;
+
+	document.getElementById('clockbox').innerHTML=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+" "+nhour+":"+nmin+ap+"";
+    }
+
+	window.onload=function(){
+	GetClock();
+	setInterval(GetClock,1000);
+	}
+</script>
+</head>
+
+<body>  
+	<header class="title-block">
+		<h1>Phil's Pills</h1>  
+        <div id="clockbox"></div>
+    </header> 
+    
+	<div class="tabs" id="tabs">    
+    	<ul class="tab-links"> 
+    		<li class="active" style="border-left:thin solid #FFFFFF; margin-left:1.5%"><a href="#tab1">Home</a></li>
+    		<li><a href="#tab2">Add</a></li> 
+    		<li><a href="#tab3">Contacts</a></li>
+    		<li style="margin-right:1.5%"><a href="#tab4">Settings</a></li>
+    	</ul>   
+        <div class="content">
+     		<div id="tab1" class="tab active"> 
+            	
+        		<p>Tab #1 content goes here!</p>
+        	</div>
+ 
+        	<div id="tab2" class="tab"> 
+            	<table class="addInput" align="center" width="30%" border="0">
+					<tr>
+						<td><input type="text" name="mName" placeholder="Medication Name" required /></td>
+					</tr>
+                    
+					<tr>
+						<td><input type="number" name="mDose" placeholder="Dosage" min="0" required /></td>
+					</tr>
+                    
+					<tr>
+						<td class="timeIn"><input type="number" name="mHour" placeholder="Hour" min="1" max="12" required /></td> 
+                        <td class="timeColon">:</td>
+                        <td class="timeIn"><input type="number" name="mMinute" placeholder="Minute" min="0" max="59" required /></td>
+                        <td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." required />A.M.</td>
+                        <td class="timePeriod"><input type="radio" name="mPeriod" value="P.M." />P.M.</td>   
+					</tr> 
+                    
+                    <tr>  
+                    	<td><input type="number" name="mFreq" placeholder="Frequency (Hours)" min="0" required></td>
+                    </tr>
+                    
+					<tr>
+						<td><button type="submit" name="btn-addmed">Add Medication</button></td>
+					</tr> 
+				</table>
+        	</div>
+ 
+        	<div id="tab3" class="tab"> 
+            	<button type="newcontact" name="btn-addcontact">Add New Contact</button>
+            	<table align="center" border="0">
+                	<tr> 
+                    	<td>Name: Placeholder #1</td>
+                        <td>Phone Number: 000-000-0000</td>
+                        <td>Email: placeholder1@philspills.ml</td>
+                    </tr> 
+                    
+                    <tr> 
+                    	<td>Name: Placeholder #2</td>
+                        <td>Phone Number: 000-000-0000</td>
+                        <td>Email: placeholder2@philspills.ml</td>
+                    </tr> 
+                    
+                    <tr> 
+                    	<td>Name: Placeholder #3</td>
+                        <td>Phone Number: 000-000-0000</td>
+                        <td>Email: placeholder3@philspills.ml</td>
+                    </tr>
+                </table>
+        	</div>
+ 
+        	<div id="tab4" class="tab">
+            	<p><a href="logout.php?logout">Logout</a></p>
+        	</div> 
+        </div>
+     </div>  
+</body>
+</html>

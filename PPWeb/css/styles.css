@@ -75,7 +75,7 @@ ul li a {
 ul li:hover a {
 	color: #2C9AB7;
 }
-.hero_header {
+.title_header {
 	color: #FFFFFF;
 	text-align: center;
 	margin-top: 0px;
@@ -86,8 +86,8 @@ ul li:hover a {
 	font-size:35px; 
 	font-weight:bold;
 }
-/* Hero Section */
-.hero {
+/* Title Section */
+.title_section {
 	background-color: #8b99a7;
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -110,6 +110,7 @@ ul li:hover a {
 	text-align: justify;
 	font-weight: lighter;
 	line-height: 25px;
+	letter-spacing:1px;
 	float: left;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -353,7 +354,7 @@ nav ul li {
 	margin-top: 20px;
 	line-height: 22px;
 }
-.hero_header {
+.title_header {
 	padding-left: 10px;
 	padding-right: 10px;
 	line-height: 22px;

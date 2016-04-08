@@ -9,7 +9,7 @@ if(!isset($_SESSION['user']))
 $res=mysql_query("SELECT * FROM users WHERE user_id=".$_SESSION['user']);
 $userRow=mysql_fetch_array($res);   
 
-$uID = $userRow['user_id']; 
+$uID=mysql_query("SELECT user_id FROM users WHERE user_id=".$_SESSION['user']); 
 
 $query = "SELECT medicationName FROM prescriptions WHERE userID ='$uID'";  
 $result = mysql_query($query);
@@ -23,14 +23,12 @@ if(isset($_POST['btn-addmed']))
 	$mHour = mysql_real_escape_string($_POST['mHour']); 
 	$mMinute = mysql_real_escape_string($_POST['mMinute']);
 	$mPeriod = mysql_real_escape_string($_POST['mPeriod']);
-	$mFreq = mysql_real_escape_string($_POST['mFreq']);
 	
 	$mName = trim($mName);
 	$mDose = trim($mDose);
 	$mHour = trim($mHour);
 	$mMinute = trim($mMinute); 
 	$mPeriod = trim($mPeriod);
-	$mFreq = trim($mFreq);
 	
 	// prescription exist or not
 	$query = "SELECT mName FROM prescriptions WHERE mName = '$mName' AND user_id =".$_SESSION['user'];
@@ -39,7 +37,8 @@ if(isset($_POST['btn-addmed']))
 	
 	if($count == 0){  
 		 
-		if(mysql_query("INSERT INTO prescriptions(user_id,medicationID,mDose,mHour,mMinute,mPeriod,mFreq) VALUES		('$uID','$medication_id','$mDose','$mHour','$mMinute','$mPeriod','$mFreq')"))
+		if(mysql_query("INSERT INTO prescriptions(user_id,mName,mDose,mHour,mMinute,mPeriod) 
+						VALUES('$uID','$mName','$mDose','$mHour','$mMinute','$mPeriod'")) 
 		{
 			?>
 			<script>alert('successfully added ');</script>
@@ -78,7 +77,7 @@ if(isset($_POST['btn-addmed']))
     		<p class="tab-links">Add New Medication</p>
         </div>
     	<div id="content" class="content">
-    		<table class="addInput" align="center" width="30%" border="0">
+    		<table class="addInput" align="center" width="30%" border="0"> 
 				<tr>
 					<td class="inputTitle">Medication Name:</td>
                     <td><input type="text" name="mName" placeholder="Medication Name" required /></td>
@@ -97,11 +96,6 @@ if(isset($_POST['btn-addmed']))
             		<td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." required />A.M.</td>
             		<td class="timePeriod"><input type="radio" name="mPeriod" value="P.M." />P.M.</td>   
 				</tr> 
-                    
-            	<tr>  
-                	<td class="inputTitle">Frequency:</td>
-            		<td><input type="number" name="mFreq" placeholder="Frequency (Hours)" min="0" required></td>
-            	</tr>
                     
 				<tr>
 					<td class="btn-submit"><button type="submit" name="btn-addmed">Add Medication</button></td>

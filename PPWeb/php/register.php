@@ -8,14 +8,14 @@ include_once 'dbconnect.php';
 
 if(isset($_POST['btn-signup']))
 { 
-	$firstName = mysql_real_escape_string($_POST['first_name']);
-	$lastName = mysql_real_escape_string($_POST['last_name']);
+	$first_name = mysql_real_escape_string($_POST['first_name']);
+	$last_name = mysql_real_escape_string($_POST['last_name']);
 	$uname = mysql_real_escape_string($_POST['uname']);
 	$email = mysql_real_escape_string($_POST['email']);
 	$upass = md5(mysql_real_escape_string($_POST['pass']));
 	
-	$firstName = trim($firstName);
-	$lastName = trim($lastName);
+	$first_name = trim($firstName);
+	$last_name = trim($lastName);
 	$uname = trim($uname);
 	$email = trim($email);
 	$upass = trim($upass);
@@ -28,7 +28,8 @@ if(isset($_POST['btn-signup']))
 	
 	if($count == 0){
 		
-		if(mysql_query("INSERT INTO users(user_name,firstName,lastName,user_email,user_pass) VALUES('$uname','firstName','lastName','$email','$upass')"))
+		if(mysql_query("INSERT INTO users(user_name,first_name,last_name,user_email,user_pass) 
+						VALUES('$uname','$first_name','$last_name','$email','$upass')"))
 		{
 			?>
 			<script>alert('successfully registered ');</script>

@@ -14,8 +14,8 @@ if(isset($_POST['btn-signup']))
 	$email = mysql_real_escape_string($_POST['email']);
 	$upass = md5(mysql_real_escape_string($_POST['pass']));
 	
-	$first_name = trim($firstName);
-	$last_name = trim($lastName);
+	$first_name = trim($first_name);
+	$last_name = trim($last_name);
 	$uname = trim($uname);
 	$email = trim($email);
 	$upass = trim($upass);

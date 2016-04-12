@@ -42,8 +42,8 @@ $uID = $userRow['user_id'];
                     	<td>Name:</td> 
                         <td>Dose:</td>
                         <td>Time:</td> 
-                        <td>Frequency (Hours):</td>
-                    </tr>
+                    </tr> 
+                    
                     <?php 
 						$presRes=mysql_query("SELECT * FROM prescriptions WHERE user_id=".$_SESSION['user']);
 						$presRow=mysql_fetch_array($presRes); 
@@ -57,7 +57,6 @@ $uID = $userRow['user_id'];
 							echo $medTime;
 						 	?>
                         </td>
-                        <td><?php echo $presRow['mFreq']; ?></td> 
                     </tr>
                 </table>
         	</div>
@@ -72,9 +71,9 @@ $uID = $userRow['user_id'];
                     </tr> 
                     
                     <tr> 
-                    	<td></td> 
-                        <td></td>
-                        <td></td>
+                    	<td><?php ?></td> 
+                        <td><?php ?></td>
+                        <td><?php ?></td>
                     </tr>
                 </table>
         	</div>

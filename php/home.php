@@ -11,55 +11,32 @@ $userRow=mysql_fetch_array($res);
 
 $uID = $userRow['user_id'];  
 
-$aHour = mysql_query("SELECT mHour FROM prescriptions WHERE user_id=".$_SESSION['user']);
-$aMinute = mysql_query("SELECT mHour FROM prescriptions WHERE user_id=".$_SESSION['user']); 
-$aPeriod = mysql_query("SELECT mHour FROM prescriptions WHERE user_id=".$_SESSION['user']); 
-$aName = mysql_query("SELECT mName FROM prescriptions WHERE user_id=".$_SESSION['user']);
+$result = mysql_query("SELECT * FROM prescriptions WHERE user_id=".$_SESSION['user']);
 
-$query = "SELECT count(*) FROM prescriptions WHERE user_id =".$_SESSION['user'];
-$count = mysql_fetch_array(mysql_query($query))[0];
+if(mysql_num_rows($result) > 0) 
+{ 
+	while($row = mysql_fetch_array($result))
+	{
+		echo "<tr>";
+		echo "<td>" . $row['mName'] . "</td>";
+		echo "<td>" . $row['mDose'] . "</td>";
+		echo "<td>" . $row['mHour'] . ":" . $row['mMinute'] . " " . $row['mPeriod'];
+		echo "</td>";
+		echo "</tr>";
+	} 
+}
 ?> 
 <!doctype html>
-<html>
+<html ng-app>
 <head>
 <meta charset="utf-8">
 <title>Phil's Pills Home</title> 
 <link rel="stylesheet" href="../css/homestyle.css" type="text/css" /> 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>  
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="../js/angular.min.js"></script>
 <script src="../js/ClockBox.js"></script> 
 <script src="../js/Tabs.js"></script>  
 <script src="../js/ClockAlarm.js"></script>  
-<script>
-var medTable = angular.module("medTable", []);
-medTable.controller("MedCtrl", function($scope) {
-$scope.meds = [];
-$scope.addRow = function(){		
-	<?php  
-		for($i = 1; $i <= $count; $i++) 
-			{
-				$presRes=mysql_query("SELECT * FROM prescriptions WHERE prescriptionID = AND user_id=".$_SESSION['user']);
-				$presRow=mysql_fetch_array($presRes);   
-				if($presRow['mMinute'] < 10) 
-				{  
-					$medTime = ($presRow['mHour']+":"+"0"+$presRow['mMinute']+$presRow['mPeriod']);
-				} 
-				else 
-				{ 
-					$medTime = ($presRow['mHour']+":"+$presRow['mMinute']+$presRow['mPeriod']); 
-				}
-				?> 
-				$scope.name=<?php echo $presRow['mName']; ?>
-				$scope.dose=<?php echo $presRow['mDose']; ?>
-				$scope.time=<?php echo $medTime; ?>
-				$scope.meds.push({ 'name':$scope.name, 'dose':$scope.dose, 'time':$scope.time });
-				<?php
-			}
-	?>
-}
-};
-)};
-</script>
 </head>
 
 <body>  
@@ -74,23 +51,45 @@ $scope.addRow = function(){
     		<li><a href="#tab2">Contacts</a></li>
     		<li style="margin-right:1.5%"><a href="#tab3">Settings</a></li>
     	</ul>   
-        <div class="content">
-     		<div id="tab1" class="tab active" ng-app="medTable" ng-controller="MedCtrl">  
+        <div class="content"> 
+        	<?php 
+			$presRes=mysql_query("SELECT * FROM prescriptions WHERE prescriptionID = AND user_id=".$_SESSION['user']);
+			$presRow=mysql_fetch_array($presRes); 
+			if($presRow['mMinute'] < 10) 
+				{  
+					$medTime = ($presRow['mHour']+":"+"0"+$presRow['mMinute']+$presRow['mPeriod']);
+				} 
+			else 
+				{ 
+					$medTime = ($presRow['mHour']+":"+$presRow['mMinute']+$presRow['mPeriod']); 
+				}
+			?> 
+     		<div id="tab1" class="tab active">  
             	<p><a href="inputmed.php" class="btn-addmed">Add Medication</a></p>
-            	<table id="medTable" class="medTable" onload="addRow()"> 
+            	<table id="medTable" class="medTable"> 
+                	<tr>No medications in database.</tr>
+                    
                 	<tr> 
                     	<th>Name:</th> 
                         <th>Dose:</th>
                         <th>Time:</th> 
                     </tr> 
-                    
-                    <tr class="med-display" ng-show="meds.length == 0">No medications in database.</tr>
-                    
-                    <tr ng-repeat="med in meds" ng-show="meds.length != 0">  
-						<td>{{med.name}}</td>
-                        <td>{{med.dose}}</td> 
-                        <td>{{med.time}}</td> 
-                    </tr>
+                    <?php
+                    $result = mysql_query("SELECT * FROM prescriptions WHERE user_id=".$_SESSION['user']);
+
+					if(mysql_num_rows($result) > 0) 
+					{ 
+						while($row = mysql_fetch_array($result))
+						{
+							echo "<tr>";
+							echo "<td>" . $row['mName'] . "</td>";
+							echo "<td>" . $row['mDose'] . "</td>";
+							echo "<td>" . $row['mHour'] . ":" . $row['mMinute'] . " " . $row['mPeriod'];
+							echo "</td>";
+							echo "</tr>";
+						} 
+					}
+					?> 
                 </table>
         	</div>
  

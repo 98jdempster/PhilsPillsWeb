@@ -112,4 +112,12 @@ td button {
 	text-decoration:none; 
 	color:white; 
 	width:120%;
-}  
+} 
+.btn-cancel { 
+	margin-top:10%; 
+	padding:.5% .5% .5% .5%; 
+	background-color:#8b99a7; 
+	text-decoration:none; 
+	color:white; 
+	width:120%;
+} 

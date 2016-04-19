@@ -55,7 +55,8 @@ if (isset($_POST['btn-addmed']))
         {
             ?>
             <script>alert('successfully added ');</script>
-            <?php
+            <?php 
+			header("Location: home.php");
         }
         else
         {
@@ -69,7 +70,7 @@ if (isset($_POST['btn-addmed']))
     {
         ?>
         <script>alert('Sorry medication already added ');</script>
-	<?php
+		<?php
     }  
 }
 
@@ -93,35 +94,35 @@ if (isset($_POST['btn-addmed']))
     	<p class="tab-links">Add New Medication</p>
       </div>
       <div id="content" class="content">
-        <form method="post">
-    	  <table class="addInput" align="center" width="30%" border="0"> 
-	    <tr>
-	      <td class="inputTitle">Medication Name:</td>
-              <td><input type="text" name="mName" placeholder="Medication Name" required /></td>
-	    </tr> 
+      	<form method="post">
+    		<table class="addInput" align="center" width="30%" border="0"> 
+	    		<tr>
+	      			<td class="inputTitle">Medication Name:</td>
+        			<td><input type="text" name="mName" placeholder="Medication Name" required /></td>
+	    		</tr> 
             
-	    <tr> 
-              <td class="inputTitle">Dose:</td>
-	      <td><input type="number" name="mDose" placeholder="Dosage" min="0" required /></td>
-	    </tr>
+	    		<tr> 
+            		<td class="inputTitle">Dose:</td>
+	    			<td><input type="number" name="mDose" placeholder="Dosage" min="0" required /></td>
+	    		</tr>
             
-	    <tr>  
-              <td class="inputTitle">Time:</td>
-	      <td class="timeIn"><input type="number" name="mHour" placeholder="Hour" min="1" max="12" required /></td> 
-              <td class="timeColon">:</td>
-              <td class="timeIn"><input type="number" name="mMinute" placeholder="Minute" min="0" max="59" required /></td>
-              <td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." required />A.M.</td>
-              <td class="timePeriod"><input type="radio" name="mPeriod" value="P.M." />P.M.</td>   
-	    </tr> 
+	    		<tr>  
+            		<td class="inputTitle">Time:</td>
+	    			<td class="timeIn"><input type="number" name="mHour" placeholder="Hour" min="1" max="12" required /></td> 
+            		<td class="timeColon">:</td>
+            		<td class="timeIn"><input type="number" name="mMinute" placeholder="Minute" min="0" max="59" required /></td>
+            		<td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." required />A.M.</td>
+            		<td class="timePeriod"><input type="radio" name="mPeriod" value="P.M." />P.M.</td>   
+	    		</tr> 
             
-	    <tr>
-	      <td class="btn-submit"><button type="submit" name="btn-addmed">Add Medication</button></td>
-	    </tr>  
+	    		<tr>
+	    			<td><button type="submit" name="btn-addmed">Add Medication</button></td>
+	    		</tr>  
             
-            <tr>
-              <td class="btn-submit"><button type="submit" name="btn-cancel">Cancel</button></td>
-	    </tr>
-	  </table>
+        		<tr>
+        			<td><a href="home.php" class="btn-cancel">Cancel</button></td>
+	    		</tr>
+	  		</table>
         </form>
       </div> 
     </div>

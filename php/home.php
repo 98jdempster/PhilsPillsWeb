@@ -24,6 +24,10 @@ if(mysql_num_rows($result) > 0)
 		echo "</td>";
 		echo "</tr>";
 	} 
+} 
+else 
+{ 
+	echo ""; 
 }
 ?> 
 <!doctype html>
@@ -33,7 +37,6 @@ if(mysql_num_rows($result) > 0)
 <title>Phil's Pills Home</title> 
 <link rel="stylesheet" href="../css/homestyle.css" type="text/css" /> 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>  
-<script src="../js/angular.min.js"></script>
 <script src="../js/ClockBox.js"></script> 
 <script src="../js/Tabs.js"></script>  
 <script src="../js/ClockAlarm.js"></script>  
@@ -52,33 +55,18 @@ if(mysql_num_rows($result) > 0)
     		<li style="margin-right:1.5%"><a href="#tab3">Settings</a></li>
     	</ul>   
         <div class="content"> 
-        	<?php 
-			$presRes=mysql_query("SELECT * FROM prescriptions WHERE prescriptionID = AND user_id=".$_SESSION['user']);
-			$presRow=mysql_fetch_array($presRes); 
-			if($presRow['mMinute'] < 10) 
-				{  
-					$medTime = ($presRow['mHour']+":"+"0"+$presRow['mMinute']+$presRow['mPeriod']);
-				} 
-			else 
-				{ 
-					$medTime = ($presRow['mHour']+":"+$presRow['mMinute']+$presRow['mPeriod']); 
-				}
-			?> 
      		<div id="tab1" class="tab active">  
             	<p><a href="inputmed.php" class="btn-addmed">Add Medication</a></p>
-            	<table id="medTable" class="medTable"> 
-                	<tr>No medications in database.</tr>
-                    
-                	<tr> 
-                    	<th>Name:</th> 
-                        <th>Dose:</th>
-                        <th>Time:</th> 
-                    </tr> 
+            	<table id="medTable" class="medTable">  
                     <?php
                     $result = mysql_query("SELECT * FROM prescriptions WHERE user_id=".$_SESSION['user']);
 
 					if(mysql_num_rows($result) > 0) 
-					{ 
+					{  
+						echo "<th>Name:</th>"; 
+						echo "<th>Dose:</th>";  
+						echo "<th>Time:</th>"; 
+						
 						while($row = mysql_fetch_array($result))
 						{
 							echo "<tr>";
@@ -88,6 +76,10 @@ if(mysql_num_rows($result) > 0)
 							echo "</td>";
 							echo "</tr>";
 						} 
+					} 
+					else 
+					{ 
+						echo "<tr>No medications in database.</tr>"; 
 					}
 					?> 
                 </table>

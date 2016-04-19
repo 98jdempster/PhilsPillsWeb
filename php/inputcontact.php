@@ -14,11 +14,6 @@ if(!isset($_SESSION['user']))
 $uID = mysql_fetch_array(mysql_query("SELECT user_id FROM users WHERE user_id=".$_SESSION['user']))[0];
 error_log("Session User : ". $_SESSION['user'] ." User ID : $uID\n", 0);
 
-if(isset($_POST['btn-cancel'])) 
-{  
-	header("Location: home.php");
-}
-
 /*
   $query = "SELECT medicationName FROM prescriptions WHERE userID ='$uID'";  
   $result = mysql_query($query);
@@ -108,7 +103,7 @@ if (isset($_POST['btn-addcon']))
 							<td><button type="submit" name="btn-addcon">Register Contact</button></td>
 						</tr> 
                         <tr>
-              				<td class="btn-submit"><button type="submit" name="btn-cancel">Cancel</button></td>
+              				<td><a href="home.php" class="btn-cancel">Cancel</button></td>
 	    				</tr>
 					</table>
 				</form>

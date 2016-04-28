@@ -88,20 +88,25 @@ if (isset($_POST['btn-addcon']))
 				<form method="post">
 					<table class="addInput" align="center" width="30%" border="0">
 						<tr>
-							<td><input type="text" name="first_name" placeholder="First Name" required /></td>
-						</tr>  
-						<tr>
-							<td><input type="text" name="last_name" placeholder="Last Name" required /></td>
+							<td><input type="text" name="first_name" placeholder="First Name" /></td>
 						</tr> 
+                         
+						<tr>
+							<td><input type="text" name="last_name" placeholder="Last Name" /></td>
+						</tr> 
+                        
                     	<tr>  
-                    		<td><input type="text" name="phone_number" placeholder="Phone Number" required /></td>
+                    		<td><input type="text" name="phone_number" placeholder="Phone Number" /></td>
                     	</tr>
+                        
 						<tr>
 							<td><input type="email" name="email" placeholder="Contact Email" /></td>
 						</tr>
+                        
 						<tr>
 							<td><button type="submit" name="btn-addcon">Register Contact</button></td>
 						</tr> 
+                        
                         <tr>
               				<td><a href="home.php" class="btn-cancel">Cancel</button></td>
 	    				</tr>

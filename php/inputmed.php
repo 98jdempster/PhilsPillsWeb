@@ -6,10 +6,6 @@ if(!isset($_SESSION['user']))
 {
     header("Location: index.php");
 }
-/*
-  $res = mysql_query("SELECT * FROM users WHERE user_id=".$_SESSION['user']);
-  $userRow=mysql_fetch_array($res);   
-*/
 
 $uID = mysql_fetch_array(mysql_query("SELECT user_id FROM users WHERE user_id=".$_SESSION['user']))[0];
 error_log("Session User : ". $_SESSION['user'] ." User ID : $uID\n", 0);
@@ -18,12 +14,6 @@ if(isset($_POST['btn-cancel']))
 {  
 	header("Location: home.php");
 }
-
-/*
-  $query = "SELECT medicationName FROM prescriptions WHERE userID ='$uID'";  
-  $result = mysql_query($query);
-  $count = mysql_num_rows($result); // if medication not found then add  
-*/
 
 if (isset($_POST['btn-addmed']))
 { 
@@ -73,7 +63,6 @@ if (isset($_POST['btn-addmed']))
 		<?php
     }  
 }
-
 ?> 
 <!doctype html>
 <html>
@@ -81,7 +70,8 @@ if (isset($_POST['btn-addmed']))
     <meta charset="utf-8">
     <title>Phil's Pills - Add Medication</title>
     <link rel="stylesheet" href="../css/addmed.css" type="text/css" />  
-    <script src="../js/ClockBox.js"></script> 
+    <script src="../js/ClockBox.js"></script>  
+    <script src="../js/InputAlert.js"></script>
   </head>
 
   <body>  
@@ -98,22 +88,29 @@ if (isset($_POST['btn-addmed']))
     		<table class="addInput" align="center" width="30%" border="0"> 
 	    		<tr>
 	      			<td class="inputTitle">Medication Name:</td>
-        			<td><input type="text" name="mName" placeholder="Medication Name" required /></td>
+        			<td><input type="text" name="mName" placeholder="Medication Name" /></td>
 	    		</tr> 
             
 	    		<tr> 
             		<td class="inputTitle">Dose:</td>
-	    			<td><input type="number" name="mDose" placeholder="Dosage" min="0" required /></td>
+	    			<td><input type="number" name="mDose" placeholder="Dosage" min="0" /></td>
 	    		</tr>
             
 	    		<tr>  
             		<td class="inputTitle">Time:</td>
-	    			<td class="timeIn"><input type="number" name="mHour" placeholder="Hour" min="1" max="12" required /></td> 
+	    			<td class="timeIn"><input type="number" name="mHour" placeholder="Hour" min="1" max="12" /></td> 
             		<td class="timeColon">:</td>
-            		<td class="timeIn"><input type="number" name="mMinute" placeholder="Minute" min="0" max="59" required /></td>
-            		<td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." required />A.M.</td>
+            		<td class="timeIn"><input type="number" name="mMinute" placeholder="Minute" min="0" max="59" /></td>
+            		<td class="timePeriod"><input type="radio" name="mPeriod" value="A.M." />A.M.</td>
             		<td class="timePeriod"><input type="radio" name="mPeriod" value="P.M." />P.M.</td>   
 	    		</tr> 
+                
+               	<tr> 
+                	<td class="inputTitle">Days Of The Week:</td> 
+                    <td class="timePeriod"><input type="radio" name="mFreq" value="Every other day" />Every other day</td>
+                    <td class="timePeriod"><input type="radio" name="mFreq" value="Daily" />Daily</td>
+                    <td class="timePeriod"><input type="radio" name="mFreq" value="Weekly" />Weekly</td>
+                </tr>
             
 	    		<tr>
 	    			<td><button type="submit" name="btn-addmed">Add Medication</button></td>

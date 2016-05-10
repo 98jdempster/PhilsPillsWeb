@@ -1,11 +1,15 @@
 <?php
 session_start();
-include_once 'dbconnect.php'; 
+include_once 'dbconnect.php';  
+ 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 if(!isset($_SESSION['user']))
 {
 	header("Location: index.php");
 }
+
 $res=mysql_query("SELECT * FROM users WHERE user_id=".$_SESSION['user']);
 $userRow=mysql_fetch_array($res);   
 
@@ -15,70 +19,67 @@ $result = mysql_query("SELECT * FROM prescriptions WHERE user_id=".$_SESSION['us
 
 $maSql = "SELECT mName, mDose, mHour, mMinute, mPeriod FROM prescriptions WHERE user_id =".$_SESSION['user']; 
 $maRes = mysql_query($maSql);
+
+$mrSql = "SELECT * FROM prescriptions WHERE user_id =".$_SESSION['user']; 
+$mrRes = mysql_query($mrSql);
   
 $medArray = array(); 
+$medname_array = array(); 
+$meddose_array = array();
+$medhour_array = array();
+$medminute_array = array(); 
+$medperiod_array = array(); 
 
 while($maRow = mysql_fetch_assoc($maRes))
 { 
-	$medArray[] = $maRow; 
+	$medArray[] = $maRow;  
 }
-/* 
-Every 5 minutes {
-  $now = current_time;
-  Foreach $user currently logged in {
-    Foreach $medication that user takes {
-      If $now > $calculated_next dose {
-        Add $medication to $overdue_list
-      }
-    }
-    If there are any entries in $overdue_list {
-      Alert $user of $overdue_list
-    }
-  }
-} 
-*/ 
-$overdue_list = array(); 
+while($aMedRow = mysql_fetch_array($mrRes))
+{ 
+	$medname_array[] = $aMedRow['mName'];
+	$meddose_array[] = $aMedRow['mDose']; 
+	$medhour_array[] = $aMedRow['mHour'];
+	$medminute_array[] = $aMedRow['mMinute'];
+	$medperiod_array[] = $aMedRow['mPeriod']; 
+}
 
-//Medication alarm
-if(mysql_num_rows($result) > 0 && mysql_num_rows($result) != null) 
-{    
-	while(true) 
-	{			
-		$now = time();
-		for($x = 0; $x < count($medArray); $x++)  
+//Medication alarm  
+/*
+$overdue_list = array();  
+
+if(count($medArray) > 0) 
+{ 
+	$now = time(); 
+	
+	for($x = 0; $x < count($medArray); $x++)
+	{  
+		$hr = $medArray[$x]['mHour']; 
+		$min = $medArray[$x]['mMinute'];
+		 
+		if($medArray[$x]['mPeriod'] == "P.M." && $medArray[$x]['mHour'] < 12) 
 		{ 
-			if($now > mktime($medArray[$x]['mHour'],$medArray[$x]['mMinute'],date("n"),date("j"),date("Y"))) 
-			{  
-				$overdue_list[] = $cMed;
-			} 
-			
-			if($now == mktime($medArray[$x]['mHour'],$medArray[$x]['mMinute'],date("n"),date("j"),date("Y"))) 
-			{  
-				?>
-        		<script>alert('Take your medication! ');</script>
-				<?php	
-			}
-		} 
-		if((time() - mktime($overdue_list[0]['mHour'],$medArray[0]['mMinute'],date("n"),date("j"),date("Y"))) >= 300 
-		&& count($overdue_list) > 0) 
-		{  
-			?>
-        	<script>alert('Take your medication! ');</script>
-			<?php	
+			$hr = $medArray[$x]['mHour'] + 12; 
 		}
-		/*
-		while($alRow = mysql_fetch_array($result))
-		{  
-			if(date('g:i space? meridian') == date('g:i space? meridian',strtotime($alRow['mHour'] . ":" . $alRow['mMinute'] . $alRow['mPeriod'])))
-			{  
-				?>
-        		<script>alert('Take your medication! ');</script>
-				<?php
-			}
+	
+		if($medArray[$x]['mPeriod'] == "A.M." && $medArray[$x]['mHour'] == 12) 
+		{ 
+			$hr = $medArray[$x]['mHour'] - 12; 
 		}
-		*/
+		 
+		if($medArray[$x]['mMinute'] < 10) 
+		{  
+			$min = "0" . $medArray[$x]['mMinute'];
+		}
+		
+		$mTimeString = $hr . ":" . $min; 
+		
+		if($mTimeString == date("G:i")) 
+		{ 
+			$overdue_list[] = $medArray[$x];
+		}
 	}
-} 
+}
+*/
 ?> 
 <!doctype html>
 <html>
@@ -89,10 +90,116 @@ if(mysql_num_rows($result) > 0 && mysql_num_rows($result) != null)
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>  
 <script src="../js/ClockBox.js"></script> 
 <script src="../js/Tabs.js"></script>  
-<script src="../js/ClockAlarm.js"></script>  
+<script type="text/javascript">
+
+//var amint = setInterval(alert_med, 10000);
+//var ovint = setInterval(over_med, 300000); 
+
+function alert_med()
+{ 
+	var now = new Date(); 
+	var medNameArr = <?php echo json_encode($medname_array);?>; 
+	var medDoseArr = <?php echo json_encode($meddose_array);?>;
+	var medHourArr = <?php echo json_encode($medhour_array);?>;
+	var medMinuteArr = <?php echo json_encode($medminute_array);?>;
+	var medPeriodArr = <?php echo json_encode($medperiod_array);?>;  
+	
+	var medName; //= php echo json_encode($medArray[0]['mName']);?>;	
+	var medDose; //= php echo json_encode($medArray[0]['mDose']);?>;	
+	var medHour; //= php echo json_encode($medArray[0]['mHour']);?>;	
+	var medMinute; //= php echo json_encode($medArray[0]['mMinute']);?>;	
+	var medPeriod; //= php echo json_encode($medArray[0]['mPeriod']);?>;	
+	
+	var message = "Take your "; 
+	
+	var now = new Date();
+	
+	for(var index = 0; index < medNameArr.length; index++) 
+	{ 
+		medName = medNameArr[index];  
+		medDose = medDoseArr[index]; 
+		medHour = medHourArr[index];
+		medMinute = medMinuteArr[index];
+		medPeriod = medPeriodArr[index];
+		
+		if(medMinute < 10) 
+		{ 
+			medMinute = "0" + medMinute;
+		}
+	
+		if(medPeriod == "P.M." && medHour < 12) 
+		{ 
+			medHour = parseInt(medHour) + 12; 
+		}
+	
+		if(medPeriod == "A.M." && medHour == 12) 
+		{ 
+			medHour = parseInt(medHour) - 12; 
+		} 
+	
+		if(medHour == now.getHours() && medMinute == now.getMinutes()) 
+		{ 
+			message = message.concat(medName);
+		} 
+		
+	} 
+	
+	if(message.length > 10) 
+	{ 
+		alert(message);
+	}
+	
+	//var nextmin = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), (now.getMinutes()+1), 0, 0) - now;
+	//setTimeout(function(){}, nextmin);
+}
+
+window.onload = function () {
+	var now = new Date(); 
+	var nextmin = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), (now.getMinutes()+1), 0, 0);
+	nextmin = nextmin - now;
+
+	setTimeout(alert_med, nextmin); //Make sure the function runs as soon as time changes by a minute
+    setTimeout(alert_med, 60000); //Then set it to run again every minute
+}
+/*
+function over_med() 
+{ 
+	var oNow = new Date();
+	var oName = php echo json_encode($overdue_list[0]['mName']);?>;	
+	var oDose = php echo json_encode($overdue_list[0]['mDose']);?>;	
+	var oHour = php echo json_encode($overdue_list[0]['mHour']);?>;	
+	var oMinute = php echo json_encode($overdue_list[0]['mMinute']);?>;	
+	var oPeriod = php echo json_encode($overdue_list[0]['mPeriod']);?>;	
+	
+	if(oMinute < 10) 
+	{ 
+		oMinute = "0" + oMinute;
+	}
+	
+	if(medPeriod == "P.M." && oHour < 12) 
+	{ 
+		oHour = oHour + 12; 
+	}
+	
+	if(oPeriod == "A.M." && oHour == 12) 
+	{ 
+		oHour = oHour - 12; 
+	}  
+	
+	var message = "Take your " + oName;
+	alert(message);
+}
+
+function start_alarm() 
+{
+	var ivar = setInterval(alert_med, 60000); 
+	var ovar = setInterval(over_med, 300000);   
+}
+*/
+</script>
 </head>
 
-<body>  
+<body onload="alert_med()">  
 	<header class="title-block">
 		<h1>Phil's Pills</h1>  
         <div id="clockbox"></div>
@@ -116,14 +223,22 @@ if(mysql_num_rows($result) > 0 && mysql_num_rows($result) != null)
 						echo "<th>Name:</th>"; 
 						echo "<th>Dose:</th>";  
 						echo "<th>Time:</th>"; 
+						echo "<th>Frequency:</th>";
 						
 						while($row = mysql_fetch_array($result))
-						{
+						{  
+							$min = $row['mMinute']; 
+							
+							if($row['mMinute'] < 10) 
+							{ 
+								$min = "0" . $row['mMinute']; 
+							}
+							
 							echo "<tr>";
 							echo "<td>" . $row['mName'] . "</td>";
 							echo "<td>" . $row['mDose'] . "</td>";
-							echo "<td>" . $row['mHour'] . ":" . $row['mMinute'] . " " . $row['mPeriod'];
-							echo "</td>";
+							echo "<td>" . $row['mHour'] . ":" . $min . " " . $row['mPeriod'] . "</td>";
+							echo "<td>" . $row['mFreq'] . "</td>";
 							echo "</tr>";
 						} 
 					} 

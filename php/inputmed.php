@@ -25,12 +25,14 @@ if (isset($_POST['btn-addmed']))
     $mHour = mysql_real_escape_string($_POST['mHour']); 
     $mMinute = mysql_real_escape_string($_POST['mMinute']);
     $mPeriod = mysql_real_escape_string($_POST['mPeriod']);
+	$mFreq = mysql_real_escape_string($_POST['mFreq']);
     
     $mName = trim($mName);
     $mDose = trim($mDose);
     $mHour = trim($mHour);
     $mMinute = trim($mMinute); 
     $mPeriod = trim($mPeriod);
+	$mFreq = trim($mFreq);
 	
     // prescription exist or not
     $query = "SELECT count(*) FROM prescriptions WHERE mName = '$mName' AND user_id =".$_SESSION['user'];
@@ -40,8 +42,8 @@ if (isset($_POST['btn-addmed']))
 
     if($count == 0){  
         
-        if(mysql_query("INSERT INTO prescriptions (user_id,mName,mDose,mHour,mMinute,mPeriod) ".
-                       "VALUES ('$uID','$mName','$mDose','$mHour','$mMinute','$mPeriod')")) 
+        if(mysql_query("INSERT INTO prescriptions (user_id,mName,mDose,mHour,mMinute,mPeriod,mFreq) ".
+                       "VALUES ('$uID','$mName','$mDose','$mHour','$mMinute','$mPeriod','$mFreq')")) 
         {
             ?>
             <script>alert('successfully added ');</script>
